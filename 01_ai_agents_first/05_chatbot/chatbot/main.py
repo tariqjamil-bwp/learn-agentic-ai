@@ -7,9 +7,7 @@ from agents.run import RunConfig
 
 # Load the environment variables from the .env file
 load_dotenv()
-
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-
 # Check if the API key is present; if not, raise an error
 if not gemini_api_key:
     raise ValueError("GEMINI_API_KEY is not set. Please ensure it is defined in your .env file.")
@@ -30,14 +28,14 @@ async def start():
 
     config = RunConfig(
         model=model,
-        model_provider=external_client,
+        #model_provider=external_client,
         tracing_disabled=True
     )
     """Set up the chat session when a user connects."""
     # Initialize an empty chat history in the session.
     cl.user_session.set("chat_history", [])
-
     cl.user_session.set("config", config)
+    
     agent: Agent = Agent(name="Assistant", instructions="You are a helpful assistant", model=model)
     cl.user_session.set("agent", agent)
 
@@ -50,6 +48,7 @@ async def main(message: cl.Message):
     msg = cl.Message(content="Thinking...")
     await msg.send()
 
+    #important castings
     agent: Agent = cast(Agent, cl.user_session.get("agent"))
     config: RunConfig = cast(RunConfig, cl.user_session.get("config"))
 

@@ -8,9 +8,7 @@ from agents.tool import function_tool
 
 # Load the environment variables from the .env file
 load_dotenv()
-
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-
 # Check if the API key is present; if not, raise an error
 if not gemini_api_key:
     raise ValueError("GEMINI_API_KEY is not set. Please ensure it is defined in your .env file.")
@@ -61,10 +59,9 @@ async def start():
     """Set up the chat session when a user connects."""
     # Initialize an empty chat history in the session.
     cl.user_session.set("chat_history", [])
-
     cl.user_session.set("config", config)
     agent: Agent = Agent(name="Assistant", instructions="You are a helpful assistant", model=model)
-    agent.tools.append(get_weather)
+    agent.tools.append(get_weather)  ## IMPORTANT: Add the tool to the agent
     cl.user_session.set("agent", agent)
 
     await cl.Message(content="Welcome to the Panaversity AI Assistant! How can I help you today?").send()

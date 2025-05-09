@@ -9,15 +9,21 @@ from agents.run import RunConfig, RunContextWrapper
 load_dotenv()
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-
 # Check if the API key is present; if not, raise an error
 if not gemini_api_key:
     raise ValueError("GEMINI_API_KEY is not set. Please ensure it is defined in your .env file.")
 
 # Define the on_handoff callback function
-
-
-
+def on_handoff(agent: Agent, ctx: RunContextWrapper[None]):
+    agent_name = agent.name
+    print("--------------------------------")
+    print(f"Handing off to {agent_name}...")
+    print("--------------------------------")
+    # Send a more visible message in the chat
+    cl.Message(
+        content=f"🔄 **Handing off to {agent_name}...**\n\nI'm transferring your request to our {agent_name.lower()} who will be able to better assist you.",
+        author="System"
+    ).send()
 
 
 @cl.on_chat_start
@@ -38,19 +44,6 @@ async def start():
         tracing_disabled=True
     )
 
-
-    def on_handoff(agent: Agent, ctx: RunContextWrapper[None]):
-        agent_name = agent.name
-        print("--------------------------------")
-        print(f"Handing off to {agent_name}...")
-        print("--------------------------------")
-        # Send a more visible message in the chat
-        cl.Message(
-            content=f"🔄 **Handing off to {agent_name}...**\n\nI'm transferring your request to our {agent_name.lower()} who will be able to better assist you.",
-            author="System"
-        ).send()
-
-    
     billing_agent = Agent(name="Billing Agent", instructions="You are a billing agent", model=model)
     refund_agent = Agent(name="Refund Agent", instructions="You are a refund agent", model=model)
 

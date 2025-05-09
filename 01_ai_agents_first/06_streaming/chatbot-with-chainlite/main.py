@@ -7,7 +7,6 @@ from agents.run import RunConfig
 
 # Load the environment variables from the .env file
 load_dotenv()
-
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 # Check if the API key is present; if not, raise an error
@@ -30,7 +29,7 @@ async def start():
 
     config = RunConfig(
         model=model,
-        model_provider=external_client,
+        #model_provider=external_client,
         tracing_disabled=True
     )
     """Set up the chat session when a user connects."""

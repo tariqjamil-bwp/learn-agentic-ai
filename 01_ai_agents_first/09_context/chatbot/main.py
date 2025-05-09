@@ -6,6 +6,7 @@ from agents import Agent, Runner, AsyncOpenAI, OpenAIChatCompletionsModel
 from agents.run import RunConfig
 from agents.tool import function_tool
 from agents.run_context import RunContextWrapper
+from dataclasses import dataclass
 
 # Load the environment variables from the .env file
 load_dotenv()
@@ -33,10 +34,15 @@ async def set_starts() -> List[cl.Starter]:
     ]
 
 
+#class MyContext:
+#    def __init__(self, user_id: str):
+#        self.user_id = user_id
+#        self.seen_messages = []
+#refactor above using @dataclass
+@dataclass
 class MyContext:
-    def __init__(self, user_id: str):
-        self.user_id = user_id
-        self.seen_messages = []
+    user_id: str
+    seen_messages: List[str] = []
 
 
 @function_tool
